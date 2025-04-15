@@ -3,7 +3,7 @@ FROM ubuntu:22.04 AS base
 USER root
 SHELL ["/bin/bash", "-c"]
 
-ARG NEED_MIRROR=0
+ARG NEED_MIRROR=1
 ARG LIGHTEN=0
 ENV LIGHTEN=${LIGHTEN}
 
@@ -44,23 +44,26 @@ ENV DEBIAN_FRONTEND=noninteractive
 # python-pptx:   default-jdk                              tika-server-standard-3.0.0.jar
 # selenium:      libatk-bridge2.0-0                       chrome-linux64-121-0-6167-85
 # Building C extensions: libpython3-dev libgtk-4-1 libnss3 xdg-utils libgbm-dev
+# 修改apt源配置部分
 RUN --mount=type=cache,id=ragflow_apt,target=/var/cache/apt,sharing=locked \
     if [ "$NEED_MIRROR" == "1" ]; then \
-        sed -i 's|http://archive.ubuntu.com|https://mirrors.tuna.tsinghua.edu.cn|g' /etc/apt/sources.list; \
+        sed -i 's|http://ports\.ubuntu\.com|https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports|g' /etc/apt/sources.list; \
+        echo "Acquire::https::Verify-Peer \"false\";" > /etc/apt/apt.conf.d/99verify-peer.conf && \
+        echo "Acquire::https::Verify-Host \"false\";" >> /etc/apt/apt.conf.d/99verify-peer.conf; \
     fi; \
     rm -f /etc/apt/apt.conf.d/docker-clean && \
     echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache && \
     chmod 1777 /tmp && \
-    apt update && \
-    apt --no-install-recommends install -y ca-certificates && \
-    apt update && \
-    apt install -y libglib2.0-0 libglx-mesa0 libgl1 && \
-    apt install -y pkg-config libicu-dev libgdiplus && \
-    apt install -y default-jdk && \
-    apt install -y libatk-bridge2.0-0 && \
-    apt install -y libpython3-dev libgtk-4-1 libnss3 xdg-utils libgbm-dev && \
-    apt install -y libjemalloc-dev && \
-    apt install -y python3-pip pipx nginx unzip curl wget git vim less
+    apt-get update || apt-get update || apt-get update && \
+    apt-get --no-install-recommends install -y ca-certificates && \
+    apt-get update && \
+    apt-get install -y libglib2.0-0 libglx-mesa0 libgl1 && \
+    apt-get install -y pkg-config libicu-dev libgdiplus && \
+    apt-get install -y default-jdk && \
+    apt-get install -y libatk-bridge2.0-0 && \
+    apt-get install -y libpython3-dev libgtk-4-1 libnss3 xdg-utils libgbm-dev && \
+    apt-get install -y libjemalloc-dev && \
+    apt-get install -y python3-pip pipx nginx unzip curl wget git vim less
 
 RUN if [ "$NEED_MIRROR" == "1" ]; then \
         pip3 config set global.index-url https://mirrors.aliyun.com/pypi/simple && \

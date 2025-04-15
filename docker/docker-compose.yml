@@ -1,6 +1,7 @@
 include:
   - ./docker-compose-base.yml
 
+name: 'ragflow-general'
 services:
   ragflow:
     depends_on:

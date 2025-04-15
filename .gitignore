@@ -42,3 +42,10 @@ nltk_data/
 # Exclude hash-like temporary files like 9b5ad71b2ce5302211f9c61530b329a4922fc6a4
 *[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]*
 .lh/
+chrome-linux64-121-0-6167-85
+chromedriver-linux64-121-0-6167-85
+cl100k_base.tiktoken
+*.deb
+*.jar
+*.jar.md5
+uv.lock

@@ -1,6 +1,7 @@
 include:
   - ./docker-compose-base.yml
 
+name: 'ragflow-macos'
 services:
   ragflow:
     depends_on:
@@ -9,6 +10,8 @@ services:
     build:
       context: ../
       dockerfile: Dockerfile
+      tags:
+        - ${RAGFLOW_IMAGE}
     container_name: ragflow-server
     ports:
       - ${SVR_HTTP_PORT}:9380
