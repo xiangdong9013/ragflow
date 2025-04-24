@@ -1,5 +1,5 @@
 module.exports = {
-  'primary-color': '#338AFF', // '#338AFF',
+  'primary-color': '#34A853', // 默认值为'#338AFF',
   'border-radius-base': '4px',
   // 'menu-dark-color': '',
   // 'menu-dark-danger-color': '',

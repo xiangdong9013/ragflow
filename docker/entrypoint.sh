@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# 源码运行时会提示/ragflow/conf/service_conf.yaml.template: No such file or directory，不予理会，不要拷贝该文件过来
 # replace env variables in the service_conf.yaml file
 rm -rf /ragflow/conf/service_conf.yaml
 while IFS= read -r line || [[ -n "$line" ]]; do
