@@ -26,7 +26,8 @@ function usage() {
 
 ENABLE_WEBSERVER=1 # Default to enable web server
 ENABLE_TASKEXECUTOR=1  # Default to enable task executor
-ENABLE_MCP_SERVER=0
+# 启用MCP服务器，默认为0，即不启用
+ENABLE_MCP_SERVER=1
 CONSUMER_NO_BEG=0
 CONSUMER_NO_END=0
 WORKERS=1
@@ -34,7 +35,8 @@ WORKERS=1
 MCP_HOST="127.0.0.1"
 MCP_PORT=9382
 MCP_BASE_URL="http://127.0.0.1:9380"
-MCP_SCRIPT_PATH="/ragflow/mcp/server/server.py"
+# 使用基于项目目录的相对路径
+MCP_SCRIPT_PATH="$PWD/mcp/server/server.py"
 MCP_MODE="self-host"
 MCP_HOST_API_KEY=""
 
@@ -159,7 +161,8 @@ function start_mcp_server() {
 
 if [[ "${ENABLE_WEBSERVER}" -eq 1 ]]; then
     echo "Starting nginx..."
-    /usr/sbin/nginx
+    # 源码编译时注释掉以下行
+    # /usr/sbin/nginx
 
     echo "Starting ragflow_server..."
     while true; do
