@@ -479,7 +479,7 @@ def upload():
                 doc = doc.to_dict()
                 doc["tenant_id"] = tenant_id
                 bucket, name = File2DocumentService.get_storage_address(doc_id=doc["id"])
-                queue_tasks(doc, bucket, name)
+                queue_tasks(doc, bucket, name, 0)
             except Exception as e:
                 return server_error_response(e)
 
@@ -822,6 +822,7 @@ def retrieval():
     similarity_threshold = float(req.get("similarity_threshold", 0.2))
     vector_similarity_weight = float(req.get("vector_similarity_weight", 0.3))
     top = int(req.get("top_k", 1024))
+    highlight = bool(req.get("highlight", False)) 
 
     try:
         kbs = KnowledgebaseService.get_by_ids(kb_ids)
@@ -842,7 +843,7 @@ def retrieval():
             question += keyword_extraction(chat_mdl, question)
         ranks = settings.retrievaler.retrieval(question, embd_mdl, kbs[0].tenant_id, kb_ids, page, size,
                                                similarity_threshold, vector_similarity_weight, top,
-                                               doc_ids, rerank_mdl=rerank_mdl,
+                                               doc_ids, rerank_mdl=rerank_mdl, highlight= highlight,
                                                rank_feature=label_question(question, kbs))
         for c in ranks["chunks"]:
             c.pop("vector", None)
