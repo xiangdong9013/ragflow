@@ -27,7 +27,7 @@ function usage() {
 ENABLE_WEBSERVER=1 # Default to enable web server
 ENABLE_TASKEXECUTOR=1  # Default to enable task executor
 # 启用MCP服务器，默认为0，即不启用
-ENABLE_MCP_SERVER=0
+ENABLE_MCP_SERVER=1
 CONSUMER_NO_BEG=0
 CONSUMER_NO_END=0
 WORKERS=1
@@ -141,17 +141,17 @@ function task_exe() {
     JEMALLOC_PATH="$(pkg-config --variable=libdir jemalloc)/libjemalloc.so"
     while true; do
         LD_PRELOAD="$JEMALLOC_PATH" \
-        "$PY" rag/svr/task_executor.py "${host_id}_${consumer_id}"
+        #"$PY" rag/svr/task_executor.py "${host_id}_${consumer_id}"
         # 调试时使用以下命令，添加参数：-m debugpy --listen 9999 --wait-for-client 
-        #"$PY" -m debugpy --listen 9999 --wait-for-client rag/svr/task_executor.py "${host_id}_${consumer_id}"
+        "$PY" -m debugpy --listen 9999 --wait-for-client rag/svr/task_executor.py "${host_id}_${consumer_id}"
     done
 }
 
 function start_mcp_server() {
     echo "Starting MCP Server on ${MCP_HOST}:${MCP_PORT} with base URL ${MCP_BASE_URL}..."
-    "$PY" "${MCP_SCRIPT_PATH}" \
+    #"$PY" "${MCP_SCRIPT_PATH}" \
     # 调试时使用以下命令
-    #"$PY" -m debugpy --listen 9998 --wait-for-client "${MCP_SCRIPT_PATH}" \
+    "$PY" -m debugpy --listen 9998 --wait-for-client "${MCP_SCRIPT_PATH}" \
         --host="${MCP_HOST}" \
         --port="${MCP_PORT}" \
         --base_url="${MCP_BASE_URL}" \
@@ -170,9 +170,9 @@ if [[ "${ENABLE_WEBSERVER}" -eq 1 ]]; then
 
     echo "Starting ragflow_server..."
     while true; do
-        "$PY" api/ragflow_server.py
+        #"$PY" api/ragflow_server.py
         # 调试时使用以下命令
-        #"$PY" -m debugpy --listen 9997 --wait-for-client api/ragflow_server.py
+        "$PY" -m debugpy --listen 9997 --wait-for-client api/ragflow_server.py
     done &
 fi
 
