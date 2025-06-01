@@ -1,3 +1,5 @@
+# 源码编译运行时使用的镜像
+name: 'ragflow-general'
 services:
   es01:
     container_name: ragflow-es-01
